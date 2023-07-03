@@ -73,11 +73,17 @@ function Menu() {
     <main className="menu">
       <h2>Our menu</h2>
       {numPizzas > 0 ? (
-        <ul className="pizzas">
-          {pizzaData.map((pizza) => (
-            <Pizza pizzaObj={pizza} key={pizza.name} />
-          ))}
-        </ul>
+        <React.Fragment key="return multiple elements">
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </React.Fragment>
       ) : (
         <p>Still working on our menu, please come back later</p>
       )}
@@ -99,20 +105,21 @@ function Menu() {
 }
 
 // props stands for properties
-function Pizza(props) {
-  if (props.pizzaObj.soldOut) return null;
+// distructing props
+function Pizza({ pizzaObj }) {
+  //   if (pizzaObj.soldOut) return null;
   return (
-    <li className="pizza">
-      <img src={props.pizzaObj.photoName} alt="a pizza"></img>
-      <h3>{props.pizzaObj.name} </h3>
-      <p>{props.pizzaObj.ingredients}</p>
-      <spain>{props.pizzaObj.price + 1}</spain>
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : null}`}>
+      <img src={pizzaObj.photoName} alt="a pizza"></img>
+      <h3>{pizzaObj.name} </h3>
+      <p>{pizzaObj.ingredients}</p>
+      <spain>{pizzaObj.soldOut ? "Sold Out" : pizzaObj.price}</spain>
     </li>
   );
 }
 function Footer() {
   const hour = new Date().getHours();
-  const openHour = 12;
+  const openHour = 10;
   const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
 
@@ -122,10 +129,7 @@ function Footer() {
   return (
     <footer className="footer">
       {isOpen ? (
-        <div className="order">
-          <p>We're open until {closeHour}:00</p>
-          <button className="btn">Order</button>
-        </div>
+        <Order closeHour={closeHour} />
       ) : (
         <p>
           We're open from {openHour}:00 until {closeHour}:00
@@ -134,6 +138,16 @@ function Footer() {
     </footer>
   );
 }
+
+function Order({ closeHour }) {
+  return (
+    <div className="order">
+      <p>We're open until {closeHour}:00</p>
+      <button className="btn">Order</button>
+    </div>
+  );
+}
+
 // Component function name needs to start with uppercase letter and return some markup(JSX).
 
 //React v18
