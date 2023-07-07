@@ -7,11 +7,11 @@ import Stats from "./Stats";
 export default function App() {
   const [items, setItems] = useState([]);
 
-  function handleAddItems(item) {
+  function handleItems(item) {
     setItems((items) => [...items, item]);
   }
 
-  function handleDeleteItem(id) {
+  function handleDeleteItems(id) {
     setItems((items) => items.filter((item) => item.id !== id));
   }
 
@@ -22,22 +22,19 @@ export default function App() {
       )
     );
   }
-
   function handleClearList() {
     const confirmed = window.confirm(
       "Are you sure you want to delete all items?"
     );
-
     if (confirmed) setItems([]);
   }
-
   return (
     <div className="app">
       <Logo />
-      <Form onAddItems={handleAddItems} />
+      <Form onAddItems={handleItems} />
       <PackingList
         items={items}
-        onDeleteItem={handleDeleteItem}
+        onDeleteItem={handleDeleteItems}
         onToggleItem={handleToggleItem}
         onClearList={handleClearList}
       />
