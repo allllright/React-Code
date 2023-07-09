@@ -20,6 +20,7 @@ export default function PackingList({
       .sort((a, b) => Number(a.packed) - Number(b.packed));
 
   return (
+    // Hide Scrollbar add "overflow: hidden;" to .list ul.
     <div className="list">
       <ul>
         {sortedItems.map((item) => (
