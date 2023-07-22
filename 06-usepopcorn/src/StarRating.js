@@ -15,6 +15,7 @@ export default function StarRating({
   color = "#fcc419",
   size = "48",
   defaultRating = 0,
+  onSetRating,
 }) {
   const textStyle = {
     lineHeight: "1",
@@ -24,13 +25,17 @@ export default function StarRating({
   };
   const [rating, setRating] = useState(defaultRating);
   const [tmpRating, setTmpRating] = useState(0);
+  function handleRating(rating) {
+    setRating(rating);
+    onSetRating(rating);
+  }
   return (
     <div style={containerStyle}>
       <div style={starContainerStyle}>
         {Array.from({ length: maxRating }, (_, i) => (
           <Star
             key={i}
-            onRate={() => setRating(i + 1)}
+            onRate={() => handleRating(i + 1)}
             full={tmpRating ? tmpRating >= i + 1 : rating >= i + 1}
             onHoverIn={() => setTmpRating(i + 1)}
             onHoverOut={() => setTmpRating(0)}
