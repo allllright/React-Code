@@ -14,6 +14,19 @@ export default function App() {
   const [err, setErr] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
+  function handleSelectMovie(id) {
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
+  }
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
+  function handleAddWatched(movie) {
+    setWatched((watched) => [...watched, movie]);
+    // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
+  }
+  function handleDeleteWatched(id) {
+    setWatched(watched.filter((movie) => movie.imdbID !== id));
+  }
   // fetch seach movies with AbortController
   useEffect(
     function () {
@@ -54,19 +67,13 @@ export default function App() {
     },
     [query]
   );
-
-  function handleSelectMovie(id) {
-    setSelectedId((selectedId) => (id === selectedId ? null : id));
-  }
-  function handleCloseMovie() {
-    setSelectedId(null);
-  }
-  function handleAddWatched(movie) {
-    setWatched((watched) => [...watched, movie]);
-  }
-  function handleDeleteWatched(id) {
-    setWatched(watched.filter((movie) => movie.imdbID !== id));
-  }
+  // use localStorage
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
+  );
   return (
     <>
       <NavBar>
