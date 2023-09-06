@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 const KEY = "22d91079";
 
@@ -93,21 +94,29 @@ function Search({ query, setQuery }) {
   // }, []);
   // select dom element with useRef
   const inputEl = useRef(null);
-  useEffect(
-    function () {
-      function callback(e) {
-        if (document.activeElement === inputEl.current) return;
-        if (e.code === "Enter") {
-          inputEl.current.focus();
-          setQuery("");
-        }
-      }
-      document.addEventListener("keydown", callback);
-      inputEl.current.focus();
-      return () => document.addEventListener("keydown", callback);
-    },
-    [setQuery]
-  );
+
+  useKey("Enter", function () {
+    if (document.activeElement === inputEl.current) return;
+
+    inputEl.current.focus();
+    setQuery("");
+  });
+
+  // useEffect(
+  //   function () {
+  //     function callback(e) {
+  //       if (document.activeElement === inputEl.current) return;
+  //       if (e.code === "Enter") {
+  //         inputEl.current.focus();
+  //         setQuery("");
+  //       }
+  //     }
+  //     document.addEventListener("keydown", callback);
+  //     inputEl.current.focus();
+  //     return () => document.addEventListener("keydown", callback);
+  //   },
+  //   [setQuery]
+  // );
 
   return (
     <input
@@ -215,24 +224,6 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     [userRating]
   );
 
-  //keypress and cleanUP eventListener
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Escape") {
-          onCloseMovie();
-        }
-      }
-
-      document.addEventListener("keydown", callback);
-
-      return function () {
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [onCloseMovie]
-  );
-
   const {
     Title: title,
     Year: year,
@@ -245,6 +236,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Director: director,
     Genre: genre,
   } = movie;
+
+  useKey("Escape", onCloseMovie);
   //fetching the movie details
   useEffect(
     function () {
